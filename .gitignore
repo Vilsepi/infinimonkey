@@ -1,1 +1,10 @@
+# Manual corpus data files
 corpus
+
+# Compiled Python
+*.pyc
+__pycache__
+
+# Serverless metadata and dependency cache
+.serverless
+vendored
