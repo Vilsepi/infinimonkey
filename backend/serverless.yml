@@ -3,7 +3,8 @@ service: infinimonkey
 custom:
   credentialsProfile: heap
   region: eu-west-1
-  tableName: infinimonkey
+  ramblingsTableName: ${self:service}-ramblings
+  corpusBucketName: ${self:service}-corpus
 
 provider:
   name: aws
@@ -19,19 +20,23 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:Scan
         - dynamodb:GetItem
-      Resource: "arn:aws:dynamodb:${self:custom.region}:*:*"
+      Resource: "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.ramblingsTableName}"
+    - Effect: Allow
+      Action:
+        - s3:*
+        - s3:ListBucket
+        - s3:GetObject
+      Resource:
+        - "arn:aws:s3:::${self:custom.corpusBucketName}"
+        - "arn:aws:s3:::${self:custom.corpusBucketName}/*"
   environment:
-    TABLE_NAME: ${self:custom.tableName}
+    RAMBLINGS_TABLE_NAME: ${self:custom.ramblingsTableName}
+    CORPUS_BUCKET_NAME: ${self:custom.corpusBucketName}
 
 functions:
-  apiGetItems:
-    handler: api.get_items
-    memorySize: 256
-    events:
-      - http:
-          path: items
-          method: get
-          cors: true
+  rambler:
+    handler: rambler.handler
+    memorySize: 512
 
 package:
   exclude:
@@ -43,10 +48,10 @@ package:
 resources:
   Resources:
 
-    AphorismTable:
+    RamblingsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tableName}
+        TableName: ${self:custom.ramblingsTableName}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -60,4 +65,4 @@ resources:
     CorpusBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:service}
+        BucketName: ${self:custom.corpusBucketName}
