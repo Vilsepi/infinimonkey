@@ -9,6 +9,7 @@ According to the [infinite monkey theorem](https://en.wikipedia.org/wiki/Infinit
 We will also find out how well Markov chains work with Finnish. Initial tests seem promising:
 
 - *"Nightwish ja Children of Bodom ja Stratovarius ovat julkaisseet albumeita, jotka ovat kuntien ja yksityisten säätiöiden omistamia."*
+- *"Peruskallio on monin paikoin yhteiskunnallista tyytymättömyyttä."*
 - *"Pokémon on ollut mafiamaista touhua."*
 - *"Tätä aiemmin läänejä oli Ahvenanmaa mukaan lukien Aamulehti, Iltalehti ja Kauppalehti."*
 - *"Kuuluisia suomalaistaiteilijoita ovat esimerkiksi liito-orava ja rusakko."*
