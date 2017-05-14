@@ -16,27 +16,32 @@ def get_corpus():
     full_text = ""
     for object_summary in bucket.objects.all():
         full_text += str(object_summary.get().get("Body").read())
-    print(len(full_text))
+    print("Read {} chars of corpus".format(len(full_text)))
     return full_text
 
-def generate_sentences(text_model, count):
-    ramblings_table_name = os.environ.get("RAMBLINGS_TABLE_NAME")
-    sentences = []
+def generate_ramblings(text_model, count):
+    ramblings = {}
     for i in range(count):
-        sentence = text_model.make_short_sentence(140, tries=10)
-        if sentence:
-            sentences.append(sentence.lstrip("- "))
-    return sentences
+        rambling = text_model.make_short_sentence(140, tries=10)
+        if rambling:
+            hash = hashlib.sha1(rambling.encode("utf-8")).hexdigest()
+            ramblings[hash] = {
+                "id": hash,
+                "text": rambling.lstrip("- ")
+            }
+    return ramblings
+
+def save_ramblings(items):
+    table = boto3.resource("dynamodb").Table(os.environ.get("RAMBLINGS_TABLE_NAME"))
+    print("Saving {} ramblings to dynamo".format(len(items)))
+    with table.batch_writer() as batch:
+        for key, item in items.items():
+            batch.put_item(Item=item)
 
 def handler(event, context):
     text_model = markovify.Text(get_corpus())
-    sentences = generate_sentences(text_model, 10)
-    for sentence in sentences:
-        if sentence:
-            hash = hashlib.sha1(sentence.encode("utf-8")).hexdigest()
-            print(hash)
-            print(sentence)
-
+    ramblings = generate_ramblings(text_model, 15)
+    save_ramblings(ramblings)
 
 if __name__ == "__main__":
     handler(None, None)
