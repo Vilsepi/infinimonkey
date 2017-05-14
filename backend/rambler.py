@@ -25,7 +25,7 @@ def generate_sentences(text_model, count):
     for i in range(count):
         sentence = text_model.make_short_sentence(140, tries=10)
         if sentence:
-            sentences.append(sentence)
+            sentences.append(sentence.lstrip("- "))
     return sentences
 
 def handler(event, context):
