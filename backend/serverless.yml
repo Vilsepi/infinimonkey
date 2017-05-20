@@ -36,6 +36,8 @@ functions:
   rambler:
     handler: rambler.handler
     memorySize: 512
+    events:
+      - schedule: rate(12 hours)
 
 package:
   exclude:
