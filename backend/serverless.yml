@@ -3,6 +3,8 @@ service: infinimonkey
 custom:
   credentialsProfile: heap
   region: eu-west-1
+  parentDomainName: heap.fi
+  domainName: monkey.heap.fi
   ramblingsTableName: ${self:service}-ramblings
   corpusBucketName: ${self:service}-corpus
 
@@ -75,3 +77,34 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.corpusBucketName}
+
+    FrontendBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.domainName}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: error.html
+
+    FrontendBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: FrontendBucket
+        PolicyDocument:
+          Statement:
+            - Action: s3:GetObject
+              Effect: Allow
+              Resource: arn:aws:s3:::${self:custom.domainName}/*
+              Principal: "*"
+
+    DomainName:
+      Type: AWS::Route53::RecordSet
+      Properties:
+        HostedZoneName: ${self:custom.parentDomainName}.
+        Name: ${self:custom.domainName}.
+        Type: CNAME
+        TTL: 300
+        ResourceRecords:
+          - ${self:custom.domainName}.s3-website-${self:custom.region}.amazonaws.com

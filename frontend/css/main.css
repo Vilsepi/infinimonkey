@@ -1,0 +1,29 @@
+body {
+  font-family: sans-serif;
+  margin: 30px 5px;
+  background-color: #f0f0f0;
+}
+
+#items {
+  margin: auto;
+  max-width: 700px;
+}
+
+.item {
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  margin: 5px;
+  padding: 15px;
+}
+
+
+.footer {
+  margin: 50px 0 50px 0;
+  text-align: center;
+  color: #aaa;
+}
+
+.footer a {
+  color: #aaa;
+  text-decoration: none;
+}
