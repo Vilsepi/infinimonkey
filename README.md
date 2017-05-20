@@ -10,13 +10,14 @@ According to the [infinite monkey theorem](https://en.wikipedia.org/wiki/Infinit
 
 We will also find out how well Markov chains work with Finnish. Initial tests seem promising:
 
-- *"Nightwish ja Children of Bodom ja Stratovarius ovat julkaisseet albumeita, jotka ovat kuntien ja yksityisten säätiöiden omistamia."*
-- *"Peruskallio on monin paikoin yhteiskunnallista tyytymättömyyttä."*
-- *"Pokémon on ollut mafiamaista touhua."*
-- *"Tätä aiemmin läänejä oli Ahvenanmaa mukaan lukien Aamulehti, Iltalehti ja Kauppalehti."*
-- *"Kuuluisia suomalaistaiteilijoita ovat esimerkiksi liito-orava ja rusakko."*
-- *"Suomen somalit ovat kasvaneet voimakkaasti."*
-- *"Uskonnoissa on se suojattava työasemakohtaisella palomuuriohjelmalla."*
+- *Nightwish ja Children of Bodom ja Stratovarius ovat julkaisseet albumeita, jotka ovat kuntien ja yksityisten säätiöiden omistamia.*
+- *Presidentti Risto Ryti erosi ja hänen pelättiin jäävän maahan laittomaksi siirtolaiseksi.*
+- *Heti perustamisensa jälkeen maakunnilla ei ollut kovin selvää roolia, ja niiden lujuus ja kantavuus heikkeni kuumuuden vuoksi huomattavasti.*
+- *Vastavuoroisesti lastenpsykiatrian alku Suomessa on käytössä myös Viron kansallislaulussa.*
+- *Toinen vaihtoehto olisi ollut vain pyllyjä ja heiluvia rintoja, joiden tarkoitus oli ratkoa opillisia riitoja.*
+- *Tätä aiemmin läänejä oli Ahvenanmaa mukaan lukien Aamulehti, Iltalehti ja Kauppalehti.*
+- *Uskonnoissa on se suojattava työasemakohtaisella palomuuriohjelmalla.*
+- *Peruskallio on monin paikoin yhteiskunnallista tyytymättömyyttä.*
 
 ## Planned architecture
 
