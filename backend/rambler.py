@@ -11,6 +11,7 @@ sys.path.append(os.path.join(here, "./vendored"))
 
 import markovify
 
+
 def get_corpus():
     bucket = boto3.resource("s3").Bucket(os.environ.get("CORPUS_BUCKET_NAME"))
     full_text = ""
@@ -18,6 +19,7 @@ def get_corpus():
         full_text += str(object_summary.get().get("Body").read())
     print("Read {} chars of corpus".format(len(full_text)))
     return full_text
+
 
 def generate_ramblings(text_model, count):
     ramblings = {}
@@ -31,6 +33,7 @@ def generate_ramblings(text_model, count):
             }
     return ramblings
 
+
 def save_ramblings(items):
     table = boto3.resource("dynamodb").Table(os.environ.get("RAMBLINGS_TABLE_NAME"))
     print("Saving {} ramblings to dynamo".format(len(items)))
@@ -38,10 +41,12 @@ def save_ramblings(items):
         for key, item in items.items():
             batch.put_item(Item=item)
 
+
 def handler(event, context):
     text_model = markovify.Text(get_corpus())
     ramblings = generate_ramblings(text_model, 15)
     save_ramblings(ramblings)
+
 
 if __name__ == "__main__":
     handler(None, None)

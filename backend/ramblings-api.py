@@ -7,6 +7,7 @@ import boto3
 
 table = boto3.resource("dynamodb").Table(os.environ.get("RAMBLINGS_TABLE_NAME"))
 
+
 def _log_dynamo(response):
     print("HTTPStatusCode:{}, RetryAttempts:{}, ScannedCount:{}, Count:{}".format(
         response.get("ResponseMetadata").get("HTTPStatusCode"),
@@ -14,6 +15,7 @@ def _log_dynamo(response):
         response.get("ScannedCount"),
         response.get("Count")
     ))
+
 
 def get_ramblings(event, context):
     response = table.scan(Limit=10)
