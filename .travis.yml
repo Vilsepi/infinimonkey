@@ -1,0 +1,11 @@
+language: python
+python:
+  - "3.6"
+
+install:
+  - pip install flake8
+  - cd backend
+  - pip install -t vendored -r requirements.txt
+
+script:
+  - flake8 -v backend/*.py --max-line-length=130
