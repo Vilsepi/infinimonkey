@@ -38,6 +38,14 @@ functions:
     memorySize: 512
     events:
       - schedule: rate(12 hours)
+  apiGetRamblings:
+    handler: ramblings-api.get_ramblings
+    memorySize: 256
+    events:
+      - http:
+          path: ramblings
+          method: get
+          cors: true
 
 package:
   exclude:
