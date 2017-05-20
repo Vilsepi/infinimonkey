@@ -3,9 +3,11 @@ python:
   - "3.6"
 
 install:
-  - pip install flake8
+  - python3.6 -m pip install flake8
   - cd backend
-  - pip install -t vendored -r requirements.txt
+  - python3.6 -m pip install -t vendored -r requirements.txt
+  - pwd
 
 script:
-  - flake8 -v backend/*.py --max-line-length=130
+  - pwd
+  - python3.6 -m flake8 -v backend/*.py --max-line-length=130
