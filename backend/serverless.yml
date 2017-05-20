@@ -37,9 +37,10 @@ provider:
 functions:
   rambler:
     handler: rambler.handler
-    memorySize: 512
+    memorySize: 1024
+    timeout: 30
     events:
-      - schedule: rate(12 hours)
+      - schedule: rate(24 hours)
   apiGetRamblings:
     handler: ramblings-api.get_ramblings
     memorySize: 256

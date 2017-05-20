@@ -25,6 +25,7 @@ def generate_ramblings(text_model, count):
     ramblings = {}
     for i in range(count):
         rambling = text_model.make_short_sentence(140, tries=10)
+        print(rambling)
         if rambling:
             hash = hashlib.sha1(rambling.encode("utf-8")).hexdigest()
             ramblings[hash] = {
@@ -44,7 +45,7 @@ def save_ramblings(items):
 
 def handler(event, context):
     text_model = markovify.Text(get_corpus())
-    ramblings = generate_ramblings(text_model, 15)
+    ramblings = generate_ramblings(text_model, 40)
     save_ramblings(ramblings)
 
 
