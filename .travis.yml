@@ -6,7 +6,7 @@ install:
   - python3.6 -m pip install flake8
   - cd backend
   - python3.6 -m pip install -t vendored -r requirements.txt
-  - pwd
+  - cd ..
 
 script:
   - pwd
