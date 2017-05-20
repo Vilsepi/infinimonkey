@@ -23,7 +23,6 @@ provider:
       Resource: "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.ramblingsTableName}"
     - Effect: Allow
       Action:
-        - s3:*
         - s3:ListBucket
         - s3:GetObject
       Resource:
