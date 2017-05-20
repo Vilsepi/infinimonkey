@@ -16,7 +16,7 @@ def get_corpus():
     bucket = boto3.resource("s3").Bucket(os.environ.get("CORPUS_BUCKET_NAME"))
     full_text = ""
     for object_summary in bucket.objects.all():
-        full_text += str(object_summary.get().get("Body").read())
+        full_text += str(object_summary.get().get("Body").read(), "utf-8")
     print("Read {} chars of corpus".format(len(full_text)))
     return full_text
 
