@@ -1,5 +1,7 @@
 # Infinimonkey
 
+[![Build Status](https://travis-ci.org/Vilsepi/infinimonkey.svg?branch=master)](https://travis-ci.org/Vilsepi/infinimonkey)
+
 According to the [infinite monkey theorem](https://en.wikipedia.org/wiki/Infinite_monkey_theorem), with enough monkeys and time, you will be able to randomly produce the works of William Shakespeare. I do not have the time for that, so let's lower the bar a little:
 
 - Instead of monkeys and typewriters, we will have cyborg monkeys from [AWS](https://aws.amazon.com/)
