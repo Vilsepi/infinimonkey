@@ -10,4 +10,7 @@ install:
 
 script:
   - pwd
-  - python3.6 -m flake8 -v backend/*.py --max-line-length=130
+  - python3.6 -m flake8 -v backend/*.py --max-line-length=130 --ignore=E402 --benchmark
+
+# Ignored checks:
+# E402 module level import not at top of file, because Serverless dependency imports
