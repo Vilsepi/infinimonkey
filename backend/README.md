@@ -1,7 +1,7 @@
 
 Install dependencies:
 
-	sudo npm install -g serverless
+    sudo npm install -g serverless
     pip install -U -t vendored -r requirements.txt
 
 Deploy:
