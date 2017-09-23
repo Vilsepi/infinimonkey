@@ -43,24 +43,19 @@ def _convert_html_to_text(html, source):
     soup = BeautifulSoup(html, "html.parser")
     print("Parsing content from source " + source)
 
+    div_class_parsers = {
+        "Tivi": "article-body",
+        "Iltalehti": "article-body",
+        "Yle": "yle__article__content",
+        "Mikrobitti.fi": "post-content",
+        "Aamulehti": "content--main",
+        "Suomenmaa": "ArticleText",
+        "Kaleva": "article__text"
+    }
+
     text = ""
-    if source == "Tivi":
-        for e in soup.find("div", class_="article-body").find_all("p", recursive=False):
-            text += e.get_text() + " "
-    elif source == "Iltalehti":
-        for e in soup.find("div", class_="article-body").find_all("p", recursive=False):
-            text += e.get_text() + " "
-    elif source == "Yle":
-        for e in soup.find("div", class_="yle__article__content").find_all("p", recursive=False):
-            text += e.get_text() + " "
-    elif source == "Mikrobitti.fi":
-        for e in soup.find("div", class_="post-content").find_all("p", recursive=False):
-            text += e.get_text() + " "
-    elif source == "Aamulehti":
-        for e in soup.find("div", class_="content--main").find_all("p", recursive=False):
-            text += e.get_text() + " "
-    elif source == "Suomenmaa":
-        for e in soup.find("div", class_="ArticleText").find_all("p", recursive=False):
+    if source in div_class_parsers:
+        for e in soup.find("div", class_=div_class_parsers[source]).find_all("p"):
             text += e.get_text() + " "
     elif source == "Ilta-Sanomat":
         mess = soup.find("div", class_="body")
