@@ -40,7 +40,7 @@ def _get_feed_xml():
 
 # Scrape given html to plaintext
 def _convert_html_to_text(html, source):
-    soup = BeautifulSoup(html, "lxml")
+    soup = BeautifulSoup(html, "html.parser")
     print("Parsing content from source " + source)
 
     text = ""
@@ -97,10 +97,10 @@ def handler(event, context):
     print("Fetching feed")
     headlines = _get_feed_xml()
     print("Fetching content")
-    corpus_items = list(filter(None.__ne__, [_get_content(headline) for headline in headlines]))
+    corpus_items = list(filter(None.__ne__, [_get_content(headline) for headline in headlines[:3]]))
 
     if not event.get("is_local_dev"):
-        _save_to_dynamo(corpus_items[:10])
+        _save_to_dynamo(corpus_items)
     else:
         print(json.dumps(headlines, indent=1))
         raise NotImplementedError("Local DynamoDB usage not implemented")
