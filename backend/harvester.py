@@ -18,7 +18,7 @@ import boto3
 # Download RSS feed and parse news entries
 def _get_feed_xml():
     url = "http://feeds.feedburner.com/ampparit-uutiset"
-    response = requests.get(url)
+    response = requests.get(url, timeout=5)
 
     ns = {"atom": "http://www.w3.org/2005/Atom"}
     feed = ElementTree.fromstring(response.content)
@@ -76,7 +76,12 @@ def _get_content(item):
         print("Dropping unsupported source " + item["author"])
         return None
 
-    response = requests.get(item["feed_url"])
+    try:
+        response = requests.get(item["feed_url"], timeout=5)
+    except Exception as e:
+        print(e)
+        return None
+
     if response.status_code == 404:
         print("Feed link is stale")
         return None
