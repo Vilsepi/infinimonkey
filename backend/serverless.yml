@@ -45,8 +45,8 @@ provider:
 functions:
   harvester:
     handler: harvester.handler
-    memorySize: 512
-    timeout: 120
+    memorySize: 1024
+    timeout: 300
     events:
       - schedule: rate(30 minutes)
   rambler:
@@ -99,8 +99,8 @@ resources:
           - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 3
 
     CorpusSourcesTable:
       Type: AWS::DynamoDB::Table
