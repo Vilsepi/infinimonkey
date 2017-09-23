@@ -44,18 +44,29 @@ def _convert_html_to_text(html, source):
     print("Parsing content from source " + source)
 
     div_class_parsers = {
-        "Tivi": "article-body",
-        "Iltalehti": "article-body",
-        "Yle": "yle__article__content",
-        "Mikrobitti.fi": "post-content",
         "Aamulehti": "content--main",
+        "Iltalehti": "article-body",
+        "Kaleva": "article__text",
+        "Mikrobitti.fi": "post-content",
+        "Mobiili.fi": "blogcontent",
+        "MTV.fi": "article",
+        "Savon Sanomat": "article__body",
+        "Seura": "content__body",
         "Suomenmaa": "ArticleText",
-        "Kaleva": "article__text"
+        "Talouselämä": "article-body",
+        "Tivi": "article-body",
+        "Yle": "yle__article__content"
     }
 
     text = ""
     if source in div_class_parsers:
         for e in soup.find("div", class_=div_class_parsers[source]).find_all("p"):
+            text += e.get_text() + " "
+    elif source == "Demokraatti.fi":
+        for e in soup.find("section", class_="post-content").find_all("p"):
+            text += e.get_text() + " "
+    elif source == "Pohjalainen":
+        for e in soup.find("article", class_="article__full").find_all("p"):
             text += e.get_text() + " "
     elif source == "Ilta-Sanomat":
         mess = soup.find("div", class_="body")
