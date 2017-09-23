@@ -47,6 +47,9 @@ def _convert_html_to_text(html, source):
     if source == "Tivi":
         for e in soup.find("div", class_="article-body").find_all("p", recursive=False):
             text += e.get_text() + " "
+    elif source == "Iltalehti":
+        for e in soup.find("div", class_="article-body").find_all("p", recursive=False):
+            text += e.get_text() + " "
     elif source == "Yle":
         for e in soup.find("div", class_="yle__article__content").find_all("p", recursive=False):
             text += e.get_text() + " "
@@ -55,6 +58,9 @@ def _convert_html_to_text(html, source):
             text += e.get_text() + " "
     elif source == "Aamulehti":
         for e in soup.find("div", class_="content--main").find_all("p", recursive=False):
+            text += e.get_text() + " "
+    elif source == "Suomenmaa":
+        for e in soup.find("div", class_="ArticleText").find_all("p", recursive=False):
             text += e.get_text() + " "
     elif source == "Ilta-Sanomat":
         mess = soup.find("div", class_="body")
