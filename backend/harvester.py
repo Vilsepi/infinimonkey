@@ -76,8 +76,7 @@ def _get_content(item):
         print("Fetched {} bytes of HTML from {}".format(len(response.content), response.url))
         item["content_url"] = response.url
         item["content"] = _convert_html_to_text(response.text, item["author"])
-
-        print(json.dumps(item, indent=1))
+        item["content_length"] = len(item["content"])
         return item
 
 
@@ -92,12 +91,8 @@ def _save_to_dynamo(items):
 
 # Lambda entry point
 def handler(event, context):
-    print(event)
-    print(context)
-    print("Fetching feed")
     headlines = _get_feed_xml()
-    print("Fetching content")
-    corpus_items = list(filter(None.__ne__, [_get_content(headline) for headline in headlines[:3]]))
+    corpus_items = list(filter(None.__ne__, [_get_content(headline) for headline in headlines]))
 
     if not event.get("is_local_dev"):
         _save_to_dynamo(corpus_items)

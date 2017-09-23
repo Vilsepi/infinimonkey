@@ -46,9 +46,9 @@ functions:
   harvester:
     handler: harvester.handler
     memorySize: 512
-    timeout: 30
+    timeout: 120
     events:
-      - schedule: rate(1 hour)
+      - schedule: rate(30 minutes)
   rambler:
     handler: rambler.handler
     memorySize: 1024
