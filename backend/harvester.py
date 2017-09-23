@@ -64,10 +64,15 @@ def _convert_html_to_text(html, source):
         print("Fallback to crude parser")
         for e in soup.find_all("p"):
             text += e.get_text() + " "
+    print("Parsed {} bytes of plaintext".format(len(text)))
     return text
 
 
 def _get_content(item):
+    if item["author"] in ["Kauppalehti"]:
+        print("Dropping unsupported source " + item["author"])
+        return None
+
     response = requests.get(item["feed_url"])
     if response.status_code == 404:
         print("Feed link is stale")
@@ -77,6 +82,8 @@ def _get_content(item):
         item["content_url"] = response.url
         item["content"] = _convert_html_to_text(response.text, item["author"])
         item["content_length"] = len(item["content"])
+        if item["content"] == "":
+            item["content"] = "FAILED_TO_PARSE_CONTENT"
         return item
 
 
