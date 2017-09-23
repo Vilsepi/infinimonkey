@@ -22,7 +22,7 @@ def _get_feed_xml():
 
     ns = {"atom": "http://www.w3.org/2005/Atom"}
     feed = ElementTree.fromstring(response.content)
-    feed_updated = feed.find("atom:updated", ns).text
+    print("Feed last updated {}".format(feed.find("atom:updated", ns).text))
 
     id_prefix = "http://www.ampparit.com/redir.php?id="
     entries = []
