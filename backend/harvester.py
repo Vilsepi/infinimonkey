@@ -68,7 +68,7 @@ def _convert_html_to_text(html, source):
     elif source == "Pohjalainen":
         for e in soup.find("article", class_="article__full").find_all("p"):
             text += e.get_text() + " "
-    elif source == "Ilta-Sanomat":
+    elif source in ["Ilta-Sanomat", "Taloussanomat"]:
         mess = soup.find("div", class_="body")
         for script in mess.find_all("script"):
             script.decompose()
