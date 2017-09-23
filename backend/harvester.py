@@ -50,6 +50,9 @@ def _convert_html_to_text(html, source):
     elif source == "Yle":
         for e in soup.find("div", class_="yle__article__content").find_all("p", recursive=False):
             text += e.get_text() + " "
+    elif source == "Mikrobitti":
+        for e in soup.find("div", class_="post-content").find_all("p", recursive=False):
+            text += e.get_text() + " "
     elif source == "Aamulehti":
         for e in soup.find("div", class_="content--main").find_all("p", recursive=False):
             text += e.get_text() + " "
