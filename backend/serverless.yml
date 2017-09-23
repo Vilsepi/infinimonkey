@@ -25,7 +25,10 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:Scan
         - dynamodb:GetItem
-      Resource: "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.ramblingsTableName}"
+      Resource:
+        - "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.corpusTableName}"
+        - "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.corpusSourcesTableName}"
+        - "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.ramblingsTableName}"
     - Effect: Allow
       Action:
         - s3:ListBucket
@@ -43,7 +46,7 @@ functions:
   harvester:
     handler: harvester.handler
     memorySize: 512
-    timeout: 300
+    timeout: 30
     events:
       - schedule: rate(1 hour)
   rambler:
