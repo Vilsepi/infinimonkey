@@ -9,7 +9,7 @@ custom:
   ramblingsTableName: ${self:service}-dev-ramblings
   corpusTableName: ${self:service}-dev-corpus
   corpusSourcesTableName: ${self:service}-dev-corpussources
-  corpusBucketName: ${self:service}-corpus
+  corpusBucketName: ${self:service}-corpus-dev
 
 provider:
   name: aws
