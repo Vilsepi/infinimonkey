@@ -72,6 +72,12 @@ def _convert_html_to_text(html, source):
     if source in class_parsers:
         for e in children(**class_parsers[source]):
             text += e.get_text() + " "
+    elif source == "Uusi Suomi":
+        mess = soup.find("div", class_="field-name-body").find("div", class_="field-item")
+        for script in mess.find_all("script"):
+            script.decompose()
+        for e in mess.find_all("div"):
+            text += e.get_text() + " "
     elif source in ["Ilta-Sanomat", "Taloussanomat"]:
         mess = soup.find("div", class_="body")
         for script in mess.find_all("script"):
