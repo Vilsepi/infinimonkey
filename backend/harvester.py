@@ -46,7 +46,9 @@ def _convert_html_to_text(html, source):
     div_class_parsers = {
         "Aamulehti": "content--main",
         "Iltalehti": "article-body",
+        "Kainuun Sanomat": "Teksti",
         "Kaleva": "article__text",
+        "Karjalainen": "itemBody",
         "Mikrobitti.fi": "post-content",
         "Mobiili.fi": "blogcontent",
         "MTV.fi": "article",
