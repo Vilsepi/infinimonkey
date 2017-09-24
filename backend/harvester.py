@@ -50,6 +50,7 @@ def _convert_html_to_text(html, source):
         "Kainuun Sanomat": {"css": "Teksti"},
         "Kaleva": {"css": "article__text"},
         "Karjalainen": {"css": "itemBody"},
+        "Lapin Kansa": {"css": "content--main"},
         "Mikrobitti.fi": {"css": "post-content"},
         "Mobiili.fi": {"css": "blogcontent"},
         "MTV.fi": {"css": "article"},
@@ -59,6 +60,7 @@ def _convert_html_to_text(html, source):
         "Suomenmaa": {"css": "ArticleText"},
         "Talouselämä": {"css": "article-body"},
         "Tivi": {"css": "article-body"},
+        "Verkkouutiset": {"css": "entry-content"},
         "Yle": {"css": "yle__article__content"}
     }
 
@@ -126,7 +128,7 @@ def handler(event, context):
     if not event.get("is_local_dev"):
         _save_to_dynamo(corpus_items)
     else:
-        print(json.dumps(headlines, indent=1))
+        print(json.dumps(corpus_items, indent=1))
         raise NotImplementedError("Local DynamoDB usage not implemented")
 
 
