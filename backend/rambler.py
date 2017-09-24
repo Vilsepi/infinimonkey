@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 # -*- coding: utf-8 -*-
 
 import os
@@ -17,7 +17,7 @@ def get_corpus():
     full_text = ""
     for object_summary in bucket.objects.all():
         full_text += str(object_summary.get().get("Body").read(), "utf-8")
-    print("Read {} chars of corpus".format(len(full_text)))
+    print(f"Read {len(full_text)} chars of corpus")
     return full_text
 
 
@@ -37,7 +37,7 @@ def generate_ramblings(text_model, count):
 
 def save_ramblings(items):
     table = boto3.resource("dynamodb").Table(os.environ.get("RAMBLINGS_TABLE_NAME"))
-    print("Saving {} ramblings to dynamo".format(len(items)))
+    print(f"Saving {len(items)} ramblings to dynamo")
     with table.batch_writer() as batch:
         for key, item in items.items():
             batch.put_item(Item=item)
