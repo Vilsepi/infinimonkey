@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 # -*- coding: utf-8 -*-
 
 import sys
@@ -22,7 +22,7 @@ def _get_feed_xml():
 
     ns = {"atom": "http://www.w3.org/2005/Atom"}
     feed = ElementTree.fromstring(response.content)
-    print("Feed last updated {}".format(feed.find("atom:updated", ns).text))
+    print(f"Feed last updated {feed.find('atom:updated', ns).text}")
 
     id_prefix = "http://www.ampparit.com/redir.php?id="
     entries = []
@@ -34,7 +34,7 @@ def _get_feed_xml():
             "feed_url": entry.find("atom:link", ns).attrib.get("href"),
             "author": entry.find("atom:author", ns).find("atom:name", ns).text
         })
-    print("Parsed {} items".format(len(entries)))
+    print(f"Parsed {len(entries)} items")
     return entries
 
 
@@ -79,7 +79,7 @@ def _convert_html_to_text(html, source):
         print("Fallback to crude parser")
         for e in soup.find_all("p"):
             text += e.get_text() + " "
-    print("Parsed {} bytes of plaintext".format(len(text)))
+    print(f"Parsed {len(text)} bytes of plaintext")
     return text
 
 
@@ -98,7 +98,7 @@ def _get_content(item):
         print("Feed link is stale")
         return None
     else:
-        print("Fetched {} bytes of HTML from {}".format(len(response.content), response.url))
+        print(f"Fetched {len(response.content)} bytes of HTML from {response.url}")
         item["content_url"] = response.url
         item["content"] = _convert_html_to_text(response.text, item["author"])
         item["content_length"] = len(item["content"])
