@@ -43,32 +43,32 @@ def _convert_html_to_text(html, source):
     soup = BeautifulSoup(html, "html.parser")
     print("Parsing content from source " + source)
 
-    div_class_parsers = {
-        "Aamulehti": "content--main",
-        "Iltalehti": "article-body",
-        "Kainuun Sanomat": "Teksti",
-        "Kaleva": "article__text",
-        "Karjalainen": "itemBody",
-        "Mikrobitti.fi": "post-content",
-        "Mobiili.fi": "blogcontent",
-        "MTV.fi": "article",
-        "Savon Sanomat": "article__body",
-        "Seura": "content__body",
-        "Suomenmaa": "ArticleText",
-        "Talouselämä": "article-body",
-        "Tivi": "article-body",
-        "Yle": "yle__article__content"
+    class_parsers = {
+        "Aamulehti": {"css": "content--main"},
+        "Demokraatti.fi": {"css": "post-content", "parent": "section"},
+        "Iltalehti": {"css": "article-body"},
+        "Kainuun Sanomat": {"css": "Teksti"},
+        "Kaleva": {"css": "article__text"},
+        "Karjalainen": {"css": "itemBody"},
+        "Mikrobitti.fi": {"css": "post-content"},
+        "Mobiili.fi": {"css": "blogcontent"},
+        "MTV.fi": {"css": "article"},
+        "Pohjalainen": {"css": "article__full", "parent": "article"},
+        "Savon Sanomat": {"css": "article__body"},
+        "Seura": {"css": "content__body"},
+        "Suomenmaa": {"css": "ArticleText"},
+        "Talouselämä": {"css": "article-body"},
+        "Tivi": {"css": "article-body"},
+        "Yle": {"css": "yle__article__content"}
     }
 
+    # Returns all child tags of the parent tag which has a specific css class
+    def children(css, parent="div", child="p"):
+        return soup.find(parent, class_=css).find_all(child)
+
     text = ""
-    if source in div_class_parsers:
-        for e in soup.find("div", class_=div_class_parsers[source]).find_all("p"):
-            text += e.get_text() + " "
-    elif source == "Demokraatti.fi":
-        for e in soup.find("section", class_="post-content").find_all("p"):
-            text += e.get_text() + " "
-    elif source == "Pohjalainen":
-        for e in soup.find("article", class_="article__full").find_all("p"):
+    if source in class_parsers:
+        for e in children(**class_parsers[source]):
             text += e.get_text() + " "
     elif source in ["Ilta-Sanomat", "Taloussanomat"]:
         mess = soup.find("div", class_="body")
