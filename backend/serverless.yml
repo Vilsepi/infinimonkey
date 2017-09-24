@@ -70,6 +70,7 @@ package:
     - "*.md"
     - "*.yml"
     - "*.json"
+    - "*.xml"
 
 resources:
   Resources:
