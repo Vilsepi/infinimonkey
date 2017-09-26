@@ -60,24 +60,36 @@ def _convert_html_to_text(html, source):
         "Suomenmaa": {"css": "ArticleText"},
         "Talouselämä": {"css": "article-body"},
         "Tivi": {"css": "article-body"},
-        "Verkkouutiset": {"css": "entry-content"},
-        "Yle": {"css": "yle__article__content"}
+        "Verkkouutiset": {"css": "entry-content"}
     }
 
     # Returns all child tags of the parent tag which has a specific css class
     def children(css, parent="div", child="p"):
-        return soup.find(parent, class_=css).find_all(child)
+        parent_node = soup.find(parent, class_=css)
+        if parent_node:
+            return parent_node.find_all(child)
+        else:
+            return []
 
     text = ""
     if source in class_parsers:
         for e in children(**class_parsers[source]):
             text += e.get_text() + " "
+
+    elif source == "Yle":
+        mess = children("yle__article__content") # old class
+        if not mess:
+            mess = children("ydd-article__body") # new class
+        for e in mess:
+            text += e.get_text() + " "
+
     elif source == "Uusi Suomi":
         mess = soup.find("div", class_="field-name-body").find("div", class_="field-item")
         for script in mess.find_all("script"):
             script.decompose()
         for e in mess.find_all("div"):
             text += e.get_text() + " "
+
     elif source in ["Ilta-Sanomat", "Taloussanomat"]:
         mess = soup.find("div", class_="body")
         for script in mess.find_all("script"):
@@ -85,6 +97,7 @@ def _convert_html_to_text(html, source):
         for script in mess.select(".hidden"):
             script.decompose()
         text = mess.get_text()
+
     else:
         print("Fallback to crude parser")
         for e in soup.find_all("p"):
