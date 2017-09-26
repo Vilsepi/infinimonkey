@@ -77,8 +77,7 @@ def _convert_html_to_text(html, source):
             text += e.get_text() + " "
 
     elif source == "Yle":
-        mess = children("yle__article__content") or children("ydd-article__body")
-        for e in mess:
+        for e in children("yle__article__content") or children("ydd-article__body"):
             text += e.get_text() + " "
 
     elif source == "Uusi Suomi":
