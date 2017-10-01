@@ -8,7 +8,6 @@ custom:
   domainName: monkey.heap.fi
   ramblingsTableName: ${self:service}-dev-ramblings
   corpusTableName: ${self:service}-dev-corpus
-  corpusSourcesTableName: ${self:service}-dev-corpussources
   corpusBucketName: ${self:service}-corpus-dev
 
 provider:
@@ -27,7 +26,6 @@ provider:
         - dynamodb:GetItem
       Resource:
         - "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.corpusTableName}"
-        - "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.corpusSourcesTableName}"
         - "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.ramblingsTableName}"
     - Effect: Allow
       Action:
@@ -38,7 +36,6 @@ provider:
         - "arn:aws:s3:::${self:custom.corpusBucketName}/*"
   environment:
     CORPUS_TABLE_NAME: ${self:custom.corpusTableName}
-    CORPUS_SOURCES_TABLE_NAME: ${self:custom.corpusSourcesTableName}
     CORPUS_BUCKET_NAME: ${self:custom.corpusBucketName}
     RAMBLINGS_TABLE_NAME: ${self:custom.ramblingsTableName}
 
@@ -48,7 +45,7 @@ functions:
     memorySize: 1024
     timeout: 300
     events:
-      - schedule: rate(30 minutes)
+      - schedule: rate(60 minutes)
   rambler:
     handler: rambler.handler
     memorySize: 1024
@@ -102,20 +99,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 3
-
-    CorpusSourcesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:custom.corpusSourcesTableName}
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
 
     CorpusBucket:
       Type: AWS::S3::Bucket
