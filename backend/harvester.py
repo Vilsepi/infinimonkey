@@ -153,7 +153,13 @@ def save_to_dynamo(items):
 # Lambda entry point
 def handler(event, context):
     headlines = get_feed_xml()
-    corpus_items = list(filter(None.__ne__, [get_content(headline) for headline in headlines[:20]]))
+    max_items = int(os.environ.get("MAX_HARVESTED_HEADLINES"))
+    corpus_items = list(
+        filter(
+            None.__ne__,
+            [get_content(headline) for headline in headlines[:max_items]]
+        )
+    )
 
     if not event.get("is_local_dev"):
         save_to_dynamo(corpus_items)

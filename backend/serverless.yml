@@ -43,6 +43,7 @@ provider:
     CORPUS_TABLE_NAME: ${self:custom.corpusTableName}
     CORPUS_BUCKET_NAME: ${self:custom.corpusBucketName}
     RAMBLINGS_TABLE_NAME: ${self:custom.ramblingsTableName}
+    MAX_HARVESTED_HEADLINES: "50"
 
 functions:
   harvester:
