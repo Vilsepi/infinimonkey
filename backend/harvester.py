@@ -30,15 +30,17 @@ def get_feed_xml():
     print(f"Feed last updated {feed.find('atom:updated', ns).text}")
 
     id_prefix = "http://www.ampparit.com/redir.php?id="
-    entries = []
-    for entry in feed.findall("atom:entry", ns):
-        entries.append({
+    entries = [
+        {
             "id": entry.find("atom:id", ns).text.split(id_prefix, 1)[1],
             "title": entry.find("atom:title", ns).text,
             "updated": entry.find("atom:updated", ns).text,
             "feed_url": entry.find("atom:link", ns).attrib.get("href"),
             "author": entry.find("atom:author", ns).find("atom:name", ns).text
-        })
+        }
+        for entry in feed.findall("atom:entry", ns)
+    ]
+
     print(f"Parsed {len(entries)} items")
     return entries
 
