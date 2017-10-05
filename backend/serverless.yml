@@ -34,6 +34,11 @@ provider:
       Resource:
         - "arn:aws:s3:::${self:custom.corpusBucketName}"
         - "arn:aws:s3:::${self:custom.corpusBucketName}/*"
+    - Effect: Allow
+      Action:
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: "*"
   environment:
     CORPUS_TABLE_NAME: ${self:custom.corpusTableName}
     CORPUS_BUCKET_NAME: ${self:custom.corpusBucketName}

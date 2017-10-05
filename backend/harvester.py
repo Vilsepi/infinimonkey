@@ -13,10 +13,15 @@ sys.path.append(os.path.join(here, "./vendored"))
 import requests
 from bs4 import BeautifulSoup
 import boto3
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.core import patch
+patch(['boto3'])
+patch(['requests'])
 
 
 # Download RSS feed and parse news entries
-def _get_feed_xml():
+@xray_recorder.capture()
+def get_feed_xml():
     url = "http://feeds.feedburner.com/ampparit-uutiset"
     response = requests.get(url, timeout=5)
 
@@ -39,9 +44,11 @@ def _get_feed_xml():
 
 
 # Scrape given html to plaintext
-def _convert_html_to_text(html, source):
+@xray_recorder.capture()
+def parse_text(html, source):
     soup = BeautifulSoup(html, "html.parser")
     print("Parsing content from source " + source)
+    xray_recorder.current_subsegment().put_annotation('source_parser', source)
 
     class_parsers = {
         "Aamulehti": {"css": "content--main"},
@@ -103,15 +110,21 @@ def _convert_html_to_text(html, source):
     return text
 
 
-def _get_content(item):
+# Fetch page content and return object with parsed plaintext
+def get_content(item):
     if item["author"] in ["Kauppalehti"]:
         print("Dropping unsupported source " + item["author"])
         return None
 
     try:
-        response = requests.get(item["feed_url"], timeout=5)
+        url = item["feed_url"]
+        xray = xray_recorder.begin_subsegment("get url")
+        response = requests.get(url, timeout=5)
+        xray.put_annotation('html_size', len(response.content))
+        xray_recorder.end_subsegment()
     except Exception as e:
         print(e)
+        xray_recorder.end_subsegment()
         return None
 
     if response.status_code == 404:
@@ -120,7 +133,7 @@ def _get_content(item):
     else:
         print(f"Fetched {len(response.content)} bytes of HTML from {response.url}")
         item["content_url"] = response.url
-        item["content"] = _convert_html_to_text(response.text, item["author"])
+        item["content"] = parse_text(response.text, item["author"])
         item["content_length"] = len(item["content"])
         if item["content"] == "":
             item["content"] = "FAILED_TO_PARSE_CONTENT"
@@ -128,7 +141,8 @@ def _get_content(item):
 
 
 # Save entries to DynamoDB
-def _save_to_dynamo(items):
+@xray_recorder.capture()
+def save_to_dynamo(items):
     table_name = os.environ.get("CORPUS_TABLE_NAME")
     table = boto3.resource("dynamodb").Table(table_name)
     with table.batch_writer() as batch:
@@ -138,11 +152,11 @@ def _save_to_dynamo(items):
 
 # Lambda entry point
 def handler(event, context):
-    headlines = _get_feed_xml()
-    corpus_items = list(filter(None.__ne__, [_get_content(headline) for headline in headlines]))
+    headlines = get_feed_xml()
+    corpus_items = list(filter(None.__ne__, [get_content(headline) for headline in headlines[:20]]))
 
     if not event.get("is_local_dev"):
-        _save_to_dynamo(corpus_items)
+        save_to_dynamo(corpus_items)
     else:
         print(json.dumps(corpus_items, indent=1))
         raise NotImplementedError("Local DynamoDB usage not implemented")
