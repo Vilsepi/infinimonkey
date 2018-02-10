@@ -13,14 +13,15 @@ sys.path.append(os.path.join(here, "./vendored"))
 import requests
 from bs4 import BeautifulSoup
 import boto3
-from aws_xray_sdk.core import xray_recorder
-from aws_xray_sdk.core import patch
-patch(['boto3'])
-patch(['requests'])
 
+if os.environ.get("IN_AWS", "false").lower() == "true":
+    from aws_xray_sdk.core import xray_recorder  # noqa
+    from aws_xray_sdk.core import patch_all  # noqa
+    patch_all()
+    xray_recorder.configure(sampling=False)
 
 # Download RSS feed and parse news entries
-@xray_recorder.capture()
+@xray_recorder.capture("get_feed_xml")
 def get_feed_xml():
     url = "http://feeds.feedburner.com/ampparit-uutiset"
     response = requests.get(url, timeout=5)
@@ -46,7 +47,7 @@ def get_feed_xml():
 
 
 # Scrape given html to plaintext
-@xray_recorder.capture()
+@xray_recorder.capture("parse_text")
 def parse_text(html, source):
     soup = BeautifulSoup(html, "html.parser")
     print("Parsing content from source " + source)
@@ -143,7 +144,7 @@ def get_content(item):
 
 
 # Save entries to DynamoDB
-@xray_recorder.capture()
+@xray_recorder.capture("save_to_dynamo")
 def save_to_dynamo(items):
     table_name = os.environ.get("CORPUS_TABLE_NAME")
     table = boto3.resource("dynamodb").Table(table_name)
@@ -153,6 +154,7 @@ def save_to_dynamo(items):
 
 
 # Lambda entry point
+@xray_recorder.capture("handler")
 def handler(event, context):
     headlines = get_feed_xml()
     max_items = int(os.environ.get("MAX_HARVESTED_HEADLINES"))

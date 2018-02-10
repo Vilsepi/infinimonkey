@@ -8,6 +8,7 @@ __pycache__
 # Serverless metadata and dependency cache
 .serverless
 vendored
+node_modules
 
 # Virtualenvs
 monkey-venv

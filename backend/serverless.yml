@@ -1,5 +1,5 @@
 service: infinimonkey
-frameworkVersion: ">=1.23.0 <2.0.0"
+frameworkVersion: ">=1.26.0 <2.0.0"
 
 custom:
   credentialsProfile: heap
@@ -15,6 +15,7 @@ provider:
   runtime: python3.6
   region: ${self:custom.region}
   profile: ${self:custom.credentialsProfile}
+  tracing: true
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -44,6 +45,7 @@ provider:
     CORPUS_BUCKET_NAME: ${self:custom.corpusBucketName}
     RAMBLINGS_TABLE_NAME: ${self:custom.ramblingsTableName}
     MAX_HARVESTED_HEADLINES: "50"
+    IN_AWS: "true"
 
 functions:
   harvester:
@@ -66,6 +68,10 @@ functions:
           path: ramblings
           method: get
           cors: true
+
+# https://github.com/serverless/serverless/issues/3495
+plugins:
+  - serverless-plugin-tracing
 
 package:
   exclude:

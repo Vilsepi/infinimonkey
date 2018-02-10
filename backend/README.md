@@ -15,6 +15,8 @@ Install dependencies:
     sudo npm install -g serverless
     pip3 install -U -t vendored -r requirements.txt
 
+    npm install --save-dev serverless-plugin-tracing
+
 Deploy:
 
     sls deploy -v
