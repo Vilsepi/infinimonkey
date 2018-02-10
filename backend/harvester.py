@@ -30,7 +30,7 @@ def get_feed_xml():
     feed = ElementTree.fromstring(response.content)
     print(f"Feed last updated {feed.find('atom:updated', ns).text}")
 
-    id_prefix = "http://www.ampparit.com/redir.php?id="
+    id_prefix = "id="
     entries = [
         {
             "id": entry.find("atom:id", ns).text.split(id_prefix, 1)[1],
